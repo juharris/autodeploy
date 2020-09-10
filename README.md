@@ -1,5 +1,9 @@
 # autodeploy
 A simple tool with minimal dependencies to simplify automated deployment.
+This has been tested in Git Bash on Windows.
+It should work on Linux too.
+
+This code uses **polling** because more elegant solutions such as setting up hooks on the repo and sending a push notification to a server are complicated to set up for simple tasks, you might not have permission to set up these hooks, you don't have permission to open up the server publicly, etc.
 
 WARNING: It can be dangerous to automate deployment using code you don't know on your own machine.
 It is recommended to run this in an isolated environment such as a Docker container.
