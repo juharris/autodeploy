@@ -36,9 +36,9 @@ autodeploy -h
 
 Navigates to DIR.
 
-Runs COMMAND.
-
 Runs UPDATE_COMMAND.
+
+Runs COMMAND.
 
 Every SLEEP_TIME, runs UPDATE_COMMAND and if the output matches PATTERN, then COMMAND runs again.
 
