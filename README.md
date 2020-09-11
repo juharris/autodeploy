@@ -8,10 +8,31 @@ This code uses **polling** because more elegant solutions such as setting up hoo
 WARNING: It can be dangerous to automate deployment using code you don't know on your own machine.
 It is recommended to run this in an isolated environment such as a Docker container.
 
-<!-- TODO Add installation instructions. -->
+# Installation
+Save `autodeploy.sh` to somewhere in your PATH:
+
+For example (in Git Bash):
+```bash
+mkdir --parents $HOME/bin
+curl https://raw.githubusercontent.com/juharris/autodeploy/main/autodeploy.sh --output $HOME/bin/autodeploy
+export PATH="$HOME/bin:$PATH"
+echo -e '\nexport PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+```
+
+Linux:
+
+Assuming `/usr/bin` is in your PATH.
+```bash
+curl https://raw.githubusercontent.com/juharris/autodeploy/main/autodeploy.sh --output /usr/bin/autodeploy
+```
+
+Test it:
+```bash
+autodeploy -h
+```
 
 # Usage
-    ./autodeploy.sh --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN] [--sleep_time SLEEP_TIME]
+    autodeploy --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN] [--sleep_time SLEEP_TIME]
 
 Runs COMMAND.
 Then repeatedly runs UPDATE_COMMAND every SLEEP_TIME and if the result of that check matches PATTERN, then COMMAND runs again.
