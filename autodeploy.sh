@@ -8,7 +8,7 @@ workdir=.
 
 update_cmd=""
 # Default for Git.
-up_to_date_pattern="Already up-to-date"
+up_to_date_pattern="Already up.to.date"
 
 deploy_cmd=""
 stop_cmd="kill -9"
@@ -109,8 +109,8 @@ run() {
     }    
 
     check() {
-        if ${update_cmd} | grep -E "${up_to_date_pattern}"; then
-            echo "${up_to_date_pattern}"
+        if ${update_cmd} | grep -q -E "${up_to_date_pattern}"; then
+            echo "Up to date."
         else
             echo "Not up to date."
             ${stop_cmd} ${deployment_pid}
