@@ -48,4 +48,5 @@ Every SLEEP_TIME, runs UPDATE_COMMAND and if the output matches PATTERN, then CO
 | --workdir DIR | The directory to work from. Defaults to ".". |
 | --update_cmd UPDATE_COMMAND  | The command to update the code. Defaults to Git pulling the current branch from origin. |
 | --up_to_date_pattern PATTERN | The pattern to check for in the result of the UPDATE_COMMAND. If the pattern matches, then COMMAND runs. Defaults to "Already up-to-date". |
+| --stop_cmd STOP_COMMAND | The command to stop the deployment. Takes the PID of COMMAND as a parameter. Defaults to "kill -9". |
 | --sleep_time SLEEP_TIME | The amount of time to wait between checks. This is passed to the "sleep" command. Defaults to "10m". |

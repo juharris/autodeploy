@@ -4,18 +4,20 @@
 set -em
 
 # Default options.
-deploy_cmd=""
 workdir=.
 
 update_cmd=""
 # Default for Git.
 up_to_date_pattern="Already up-to-date"
 
+deploy_cmd=""
+stop_cmd="kill -9"
+
 sleep_between_checks=10m
 
 # Parse options.
 show_help() {
-    echo -e "$0 --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN] [--sleep_time SLEEP_TIME]
+    echo -e "$0 --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN]  [--stop_cmd STOP_COMMAND] [--sleep_time SLEEP_TIME]
 
 Navigates to DIR.
 Runs UPDATE_COMMAND.
@@ -31,6 +33,8 @@ WARNING: It can be dangerous to automate deployment using code you don't know on
 --update_cmd UPDATE_COMMAND   The command to update the code. Defaults to Git pulling the current branch from origin.
 
 --up_to_date_pattern PATTERN  The pattern to check for in the result of the UPDATE_COMMAND. If the pattern matches, then COMMAND runs. Defaults to \"${up_to_date_pattern}\".
+
+--stop_cmd STOP_COMMAND       The command to stop the deployment. Takes the PID of COMMAND as a parameter. Defaults to \"${stop_cmd}\".
 
 --sleep_time SLEEP_TIME       The amount of time to wait between checks. This is passed to the \"sleep\" command. Defaults to \"${sleep_between_checks}\".
 "
@@ -52,6 +56,11 @@ case $key in
         ;;
     --workdir)
         workdir="$2"
+        shift
+        shift
+        ;;
+    --stop_cmd)
+        stop_cmd="$2"
         shift
         shift
         ;;
@@ -104,7 +113,7 @@ run() {
             echo "${up_to_date_pattern}"
         else
             echo "Not up to date."
-            kill -9 ${deployment_pid}
+            ${stop_cmd} ${deployment_pid}
             sleep 5
             deploy
         fi
