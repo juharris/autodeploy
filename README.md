@@ -34,8 +34,13 @@ autodeploy -h
 # Usage
     autodeploy --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN] [--sleep_time SLEEP_TIME]
 
+Navigates to DIR.
+
 Runs COMMAND.
-Then repeatedly runs UPDATE_COMMAND every SLEEP_TIME and if the result of that check matches PATTERN, then COMMAND runs again.
+
+Runs UPDATE_COMMAND.
+
+Every SLEEP_TIME, runs UPDATE_COMMAND and if the output matches PATTERN, then COMMAND runs again.
 
 | Parameter | Description |
 | - | - |

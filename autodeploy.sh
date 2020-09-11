@@ -17,8 +17,10 @@ sleep_between_checks=10m
 show_help() {
     echo -e "$0 --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN] [--sleep_time SLEEP_TIME]
 
+Navigates to DIR.
+Runs UPDATE_COMMAND.
 Runs COMMAND.
-Then repeatedly runs UPDATE_COMMAND every SLEEP_TIME and if the result of that check matches PATTERN, then COMMAND runs again.
+Every SLEEP_TIME, runs UPDATE_COMMAND and if the output matches PATTERN, then COMMAND runs again.
 
 WARNING: It can be dangerous to automate deployment using code you don't know on your own machine. It is recommended to run this in an isolated environment such as a Docker container.
 
