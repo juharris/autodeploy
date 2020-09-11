@@ -32,7 +32,7 @@ autodeploy -h
 ```
 
 # Usage
-    autodeploy --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN] [--sleep_time SLEEP_TIME]
+    autodeploy --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN]  [--stop_cmd STOP_COMMAND] [--sleep_time SLEEP_TIME]
 
 Navigates to DIR.
 
