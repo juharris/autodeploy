@@ -14,10 +14,11 @@ deploy_cmd=""
 stop_cmd="kill -9"
 
 sleep_between_checks=10m
+sleep_after_stop=5s
 
 # Parse options.
 show_help() {
-    echo -e "$0 --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN]  [--stop_cmd STOP_COMMAND] [--sleep_time SLEEP_TIME]
+    echo -e "$0 --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN]  [--stop_cmd STOP_COMMAND] [--sleep_time SLEEP_TIME] [--sleep_after_stop SLEEP_TIME]
 
 Navigates to DIR.
 Runs UPDATE_COMMAND.
@@ -32,11 +33,13 @@ WARNING: It can be dangerous to automate deployment using code you don't know on
 
 --update_cmd UPDATE_COMMAND   The command to update the code. Defaults to Git pulling the current branch from origin.
 
---up_to_date_pattern PATTERN  The pattern to check for in the result of the UPDATE_COMMAND. If the pattern matches, then COMMAND runs. Defaults to \"${up_to_date_pattern}\".
+--up_to_date_pattern PATTERN  The regex pattern used by grep to check for in the result of the UPDATE_COMMAND. If the pattern matches, then COMMAND runs. Defaults to \"${up_to_date_pattern}\".
 
 --stop_cmd STOP_COMMAND       The command to stop the deployment. Takes the PID of COMMAND as a parameter. Defaults to \"${stop_cmd}\".
 
 --sleep_time SLEEP_TIME       The amount of time to wait between checks. This is passed to the \"sleep\" command. Defaults to \"${sleep_between_checks}\".
+
+--sleep_after_stop SLEEP_TIME       The amount of time to wait after stopping before running COMMAND again. This is passed to the \"sleep\" command. Defaults to \"${sleep_after_stop}\".
 "
 }
 
@@ -69,12 +72,17 @@ case $key in
         shift
         shift
         ;;
+    --sleep_after_stop)
+        sleep_after_stop="$2"
+        shift
+        shift
+        ;;
     --update_cmd|--update_command)
         update_cmd="$2"
         shift
         shift
         ;;
-    ----up_to_date_pattern)
+    --up_to_date_pattern)
         up_to_date_pattern="$2"
         shift
         shift
@@ -114,7 +122,7 @@ run() {
         else
             echo "Not up to date."
             ${stop_cmd} ${deployment_pid}
-            sleep 5
+            sleep ${sleep_after_stop}
             deploy
         fi
     }
