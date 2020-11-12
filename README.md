@@ -1,9 +1,11 @@
 # autodeploy
-A simple tool with minimal dependencies to simplify automated deployment.
-This has been tested in Git Bash on Windows and Linux (Ubuntu).
+A simple tool with minimal dependencies to simplify automated continuous deployment.
+This script automatically pulls your latest code and deploys the updated version.
 
 This code uses **polling** because more elegant solutions such as setting up hooks on the repo and sending a push notification to a server are complicated to set up for simple tasks, you might not have permission to set up these hooks, you don't have permission to open up the server publicly, etc.
 Similary, cron jobs are very useful for many things but are not available on all platforms.
+
+This has been tested in Git Bash on Windows and Linux (Ubuntu).
 
 WARNING: It can be dangerous to automate deployment using code you don't know on your own machine.
 It is recommended to run this in an isolated environment such as a Docker container.
@@ -59,7 +61,7 @@ Every SLEEP_TIME, runs UPDATE_COMMAND and if the output matches PATTERN, then CO
 # Examples
 
 ## Node App in a Git Repo
-Keep your Node app up-to-date with the latest changes from GitHub (the defaults are made for `git` based projects):
+Keep your Node app up-to-date with the latest changes from GitHub (the defaults are made for `git` based projects and will pull the changes from the current branch):
 ```bash
 git clone git@github.com:username/my-node-app.git
 cd my-node-app
@@ -69,7 +71,11 @@ autodeploy --cmd 'npm run start'
 ## Docker Example
 Check daily for updates to your Docker image (note that you might need `sudo` for your Docker commands):
 ```bash
-autodeploy --cmd 'docker run --rm -d -p 5000:5000 --name container-name image-name:latest' --update_cmd 'docker pull image-name:latest' --up_to_date_pattern 'Status: Image is up to date for iamge-name:latest' --stop_cmd 'docker stop container-name' --sleep_time '1d'
+autodeploy --cmd 'docker run --rm -d -p 5000:5000 --name container-name image-name:latest' \
+    --update_cmd 'docker pull image-name:latest' \
+    --up_to_date_pattern 'Status: Image is up to date for image-name:latest' \
+    --stop_cmd 'docker stop container-name' \
+    --sleep_time '1d'
 ```
 
 ## A Meta Example
