@@ -12,13 +12,14 @@ up_to_date_pattern="Already up.to.date"
 
 deploy_cmd=""
 stop_cmd="kill -9"
+pass_pid_to_stop_cmd="true"
 
 sleep_between_checks=10m
 sleep_after_stop=5s
 
 # Parse options.
 show_help() {
-    echo -e "$0 --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN]  [--stop_cmd STOP_COMMAND] [--sleep_time SLEEP_TIME] [--sleep_after_stop SLEEP_TIME]
+    echo -e "$0 --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN]  [--stop_cmd STOP_COMMAND] [--no_pass_pid] [--sleep_time SLEEP_TIME] [--sleep_after_stop SLEEP_TIME]
 
 Navigates to DIR.
 Runs UPDATE_COMMAND.
@@ -36,6 +37,8 @@ WARNING: It can be dangerous to automate deployment using code you don't know on
 --up_to_date_pattern PATTERN  The regex pattern used by grep to check for in the result of the UPDATE_COMMAND. If the pattern matches, then COMMAND runs. Defaults to \"${up_to_date_pattern}\".
 
 --stop_cmd STOP_COMMAND       The command to stop the deployment. Takes the PID of COMMAND as a parameter. Defaults to \"${stop_cmd}\".
+
+--no_pass_pid                 The PID of the COMMAND will not get passed to the STOP_COMMAND. Defaults to passing the PID to the STOP_COMMAND.
 
 --sleep_time SLEEP_TIME       The amount of time to wait between checks. This is passed to the \"sleep\" command. Defaults to \"${sleep_between_checks}\".
 
@@ -65,6 +68,10 @@ case $key in
     --stop_cmd)
         stop_cmd="$2"
         shift
+        shift
+        ;;
+    --no_pass_pid)
+        pass_pid_to_stop_cmd="false"
         shift
         ;;
     --sleep_time)
@@ -112,16 +119,20 @@ run() {
     set -x
     local deployment_pid
     deploy() {
-        ${deploy_cmd} & deployment_pid=$! 
+        ${deploy_cmd} & deployment_pid=$!
         echo "deploy: deployment_pid: ${deployment_pid}"
-    }    
+    }
 
     check() {
         if ${update_cmd} | grep -q -E "${up_to_date_pattern}"; then
             echo "Up to date."
         else
             echo "Not up to date."
-            ${stop_cmd} ${deployment_pid}
+            if [[ ${pass_pid_to_stop_cmd} == "true" ]]; then
+                ${stop_cmd} ${deployment_pid}
+            else
+                ${stop_cmd}
+            fi
             sleep ${sleep_after_stop}
             deploy
         fi

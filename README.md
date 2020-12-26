@@ -37,7 +37,7 @@ autodeploy --help
 
 # Usage
 ```bash
-autodeploy --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN]  [--stop_cmd STOP_COMMAND] [--sleep_time SLEEP_TIME] [--sleep_after_stop SLEEP_TIME]
+autodeploy --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN] [--stop_cmd STOP_COMMAND] [--no_pass_pid] [--sleep_time SLEEP_TIME] [--sleep_after_stop SLEEP_TIME]
 ```
 
 Navigates to DIR.
@@ -55,6 +55,7 @@ Every SLEEP_TIME, runs UPDATE_COMMAND and if the output matches PATTERN, then CO
 | --update_cmd UPDATE_COMMAND  | The command to update the code. Defaults to Git pulling the current branch from origin. |
 | --up_to_date_pattern PATTERN | The regex pattern used by `grep` to check for in the result of the UPDATE_COMMAND. If the pattern matches, then COMMAND runs. Defaults to "Already up.to.date". |
 | --stop_cmd STOP_COMMAND | The command to stop the deployment. Takes the PID of COMMAND as a parameter. Defaults to `kill -9`. |
+| --no_pass_pid | The PID of the COMMAND will not get passed to the STOP_COMMAND. Defaults to passing the PID to the STOP_COMMAND. |
 | --sleep_time SLEEP_TIME | The amount of time to wait between checks. This is passed to the `sleep` command. Defaults to "10m". |
 | --sleep_after_stop SLEEP_TIME | The amount of time to wait after stopping before running COMMAND again. This is passed to the `sleep` command. Defaults to "5s". |
 
@@ -75,6 +76,7 @@ autodeploy --cmd 'docker run --rm -d -p 5000:5000 --name container-name image-na
     --update_cmd 'docker pull image-name:latest' \
     --up_to_date_pattern 'Status: Image is up to date for image-name:latest' \
     --stop_cmd 'docker stop container-name' \
+    --no_pass_pid \
     --sleep_time '1d'
 ```
 
