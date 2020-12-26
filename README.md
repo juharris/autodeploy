@@ -37,7 +37,10 @@ autodeploy --help
 
 # Usage
 ```bash
-autodeploy --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] [--up_to_date_pattern PATTERN] [--stop_cmd STOP_COMMAND] [--no_pass_pid] [--sleep_time SLEEP_TIME] [--sleep_after_stop SLEEP_TIME]
+autodeploy --cmd COMMAND [--workdir DIR] [--update_cmd UPDATE_COMMAND] \
+    [--up_to_date_pattern PATTERN] \
+    [--stop_cmd STOP_COMMAND] [--no_pass_pid] \
+    [--sleep_time SLEEP_TIME] [--sleep_after_stop SLEEP_TIME]
 ```
 
 Navigates to DIR.
@@ -77,7 +80,8 @@ autodeploy --cmd 'docker run --rm -d -p 5000:5000 --name container-name image-na
     --up_to_date_pattern 'Status: Image is up to date for image-name:latest' \
     --stop_cmd 'docker stop container-name' \
     --no_pass_pid \
-    --sleep_time '1d'
+    --sleep_time '1d' \
+    --sleep_after_stop '10s'
 ```
 
 ## A Meta Example
