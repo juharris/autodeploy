@@ -120,6 +120,7 @@ run() {
     local deployment_pid
     deploy() {
         ${deploy_cmd} & deployment_pid=$!
+        trap "${stop_cmd} ${deployment_pid}" EXIT
         echo "deploy: deployment_pid: ${deployment_pid}"
     }
 
